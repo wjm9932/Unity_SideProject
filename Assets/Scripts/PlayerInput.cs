@@ -13,6 +13,11 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        if (moveInput.sqrMagnitude > 1f)
+        {
+            moveInput = moveInput.normalized;
+        }
         isJump = Input.GetButton("Jump");
         isFire = Input.GetButton("Fire1");
         isReload = Input.GetButton("Reload");
