@@ -32,11 +32,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(GetCurrentVelocity() > 0.2f || inputPlayer.isFire == true)
+        if(GetCurrentVelocity() > 0.2f)
         {
-            Rotate();
+            
         }
-
+        Rotate();
         Move(inputPlayer.moveInput);
     }
 

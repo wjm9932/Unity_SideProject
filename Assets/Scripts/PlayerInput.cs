@@ -18,8 +18,8 @@ public class PlayerInput : MonoBehaviour
         {
             moveInput = moveInput.normalized;
         }
-        isJump = Input.GetButton("Jump");
+        isJump = Input.GetButtonDown("Jump");
         isFire = Input.GetButton("Fire1");
-        isReload = Input.GetButton("Reload");
+        isReload = Input.GetButtonDown("Reload");
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="Assets\Scripts\GunPosition.cs" />
     <Compile Include="Assets\Scripts\PlayerInput.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\PlayerShooter.cs" />
     <Compile Include="Assets\Scripts\Utility.cs" />
   </ItemGroup>
   <ItemGroup>

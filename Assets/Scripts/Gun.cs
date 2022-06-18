@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    enum State
+    public enum State
     {
         Ready,
         Fire,
@@ -14,25 +14,25 @@ public class Gun : MonoBehaviour
 
     public Transform fireTransform;
     public AudioClip fireClip;
+    public ParticleSystem muzzleFlashEffect;
+    public ParticleSystem shellEjectEffect;
     public AudioClip reloadClip;
 
-    [SerializeField] private AudioSource audio;
-    [SerializeField] private ParticleSystem muzzleFlashEffect;
-    [SerializeField] private ParticleSystem shellEjectEffect;
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private State state;
-
-    [SerializeField] private const float magSize = 30f;
-    [SerializeField] private float totalMagSize;
-    [SerializeField] private float currentMagSize;
-    [SerializeField] private float accuracy;
-    [SerializeField] private float rpm;
-    [SerializeField] private float lastFireTime;
-    [SerializeField] private float fireDistance;
-    [SerializeField] private float currentSpread;
-    [SerializeField] private float maxSpread;
-    [SerializeField] private float spreadSmoothTime;
-    [SerializeField] private float refSpreadVelocity;
+    public State state { get; private set; }
+    public float fireDistance { get; private set; }
+    
+    private LineRenderer lineRenderer;
+    private AudioSource audio;
+    private const float magSize = 30f;
+    private float totalMagSize;
+    private float currentMagSize;
+    private float accuracy;
+    private float rpm;
+    private float lastFireTime;
+    private float currentSpread;
+    private float maxSpread;
+    private float spreadSmoothTime;
+    private float refSpreadVelocity;
 
     // Start is called before the first frame update
     void Start()
@@ -46,8 +46,8 @@ public class Gun : MonoBehaviour
         lineRenderer.positionCount = 2;
 
         lastFireTime = Time.time;
-        rpm = 0.2f;
-        accuracy = 1f;
+        rpm = 0.1f;
+        accuracy = 5f;
         fireDistance = 100f;
         spreadSmoothTime = 2f;
         maxSpread = 3f;
@@ -63,7 +63,7 @@ public class Gun : MonoBehaviour
         currentSpread = Mathf.SmoothDamp(currentSpread, 0f, ref refSpreadVelocity, spreadSmoothTime);
     }
 
-    void Fire(Vector3 aim)
+    public void Fire(Vector3 aim)
     {
         if (Time.time >= rpm + lastFireTime && currentMagSize > 0)
         {
@@ -105,20 +105,29 @@ public class Gun : MonoBehaviour
         lineRenderer.enabled = false;
     }
 
-    void Reload()
+    public bool Reload()
     {
-        if (currentMagSize <= magSize || totalMagSize <= 0)
+        if (currentMagSize < magSize || totalMagSize <= 0)
         {
+            state = State.Reload;
             StartCoroutine(ReloadCoroutine());
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
     IEnumerator ReloadCoroutine()
     {
-        audio.PlayOneShot(reloadClip);
-        yield return new WaitForSeconds(1.8f);
-
         totalMagSize -= Mathf.Clamp(magSize - currentMagSize, 0, totalMagSize);
         currentMagSize = magSize;
+
+        audio.PlayOneShot(reloadClip);
+   
+        yield return new WaitForSeconds(1.8f);
+
+        state = State.Ready;
     }
 }
