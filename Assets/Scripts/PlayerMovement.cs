@@ -16,6 +16,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float smoothTime;
     [SerializeField] private float turnSmoothTime;
 
+    void Awake()
+    {
+        Application.targetFrameRate = 144;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

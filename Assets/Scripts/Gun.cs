@@ -65,7 +65,7 @@ public class Gun : MonoBehaviour
 
     public bool Fire(Vector3 aim)
     {
-        if (Time.time >= rpm + lastFireTime && currentMagSize > 0)
+        if (Time.time >= rpm + lastFireTime && state == State.Ready)
         {
             Vector3 dir = aim - fireTransform.position;
             float xOffset = Utility.GetRandomNormalDistribution(0, currentSpread);
