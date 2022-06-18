@@ -39,7 +39,10 @@ public class PlayerShooter : MonoBehaviour
 
     void Shot()
     {
-        gun.Fire(aimTarget);
+        if(gun.Fire(aimTarget)== true)
+        {
+            animator.SetTrigger("Shoot");
+        }
     }
 
     void UpdateAimTarget()

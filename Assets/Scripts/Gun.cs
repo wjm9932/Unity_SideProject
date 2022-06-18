@@ -47,7 +47,7 @@ public class Gun : MonoBehaviour
 
         lastFireTime = Time.time;
         rpm = 0.1f;
-        accuracy = 5f;
+        accuracy = 10f;
         fireDistance = 100f;
         spreadSmoothTime = 2f;
         maxSpread = 3f;
@@ -63,7 +63,7 @@ public class Gun : MonoBehaviour
         currentSpread = Mathf.SmoothDamp(currentSpread, 0f, ref refSpreadVelocity, spreadSmoothTime);
     }
 
-    public void Fire(Vector3 aim)
+    public bool Fire(Vector3 aim)
     {
         if (Time.time >= rpm + lastFireTime && currentMagSize > 0)
         {
@@ -86,6 +86,11 @@ public class Gun : MonoBehaviour
             --currentMagSize;
 
             StartCoroutine(ShotEffect(ray.point));
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
