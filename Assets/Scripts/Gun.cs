@@ -20,7 +20,7 @@ public class Gun : MonoBehaviour
 
     public State state { get; private set; }
     public float fireDistance { get; private set; }
-    
+
     private LineRenderer lineRenderer;
     private AudioSource audio;
     private const float magSize = 30f;
@@ -80,12 +80,8 @@ public class Gun : MonoBehaviour
             }
             lastFireTime = Time.time;
 
-            RaycastHit ray;
-            Physics.Raycast(fireTransform.position, dir, out ray, fireDistance);
+            Shot(dir);
 
-            --currentMagSize;
-
-            StartCoroutine(ShotEffect(ray.point));
             return true;
         }
         else
@@ -94,6 +90,33 @@ public class Gun : MonoBehaviour
         }
     }
 
+    void Shot(Vector3 dir)
+    {
+        RaycastHit hit;
+        Vector3 hitPosition;
+
+        if (Physics.Raycast(fireTransform.position, dir, out hit, fireDistance) == true)
+        {
+            if (hit.collider.GetComponent<IDamagale>() != null)
+            {
+
+            }
+            else
+            {
+                EffectManager.Instance.PlayEffect(hit.point, hit.normal, EffectManager.EffectType.Commom, hit.transform);
+            }
+            hitPosition = hit.point;
+        }
+        else
+        {
+            hitPosition = fireTransform.position + fireDistance * dir;
+        }
+        StartCoroutine(ShotEffect(hitPosition));
+
+        --currentMagSize;
+    }
+
+   
     IEnumerator ShotEffect(Vector3 hitPosition)
     {
         muzzleFlashEffect.Play();
@@ -130,7 +153,7 @@ public class Gun : MonoBehaviour
         currentMagSize = magSize;
 
         audio.PlayOneShot(reloadClip);
-   
+
         yield return new WaitForSeconds(1.8f);
 
         state = State.Ready;
