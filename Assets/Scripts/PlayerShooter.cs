@@ -20,13 +20,8 @@ public class PlayerShooter : MonoBehaviour
         animator = GetComponent<Animator>();
         camera = Camera.main;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        UpdateAnimaion();
-        UpdateAimTarget();
-
         if (input.isFire == true)
         {
             Shot();
@@ -35,6 +30,17 @@ public class PlayerShooter : MonoBehaviour
         {
             Reload();
         }
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        UpdateAimTarget();
+
+        UpdateAnimaion();
+        
+        UpdateUI();
+
+        
     }
 
     void Shot()
@@ -53,10 +59,15 @@ public class PlayerShooter : MonoBehaviour
         if (Physics.Raycast(ray, out hit, gun.fireDistance) == true)
         {
             aimTarget = hit.point;
-            if (Physics.Linecast(gun.fireTransform.position, aimTarget, out hit) == true)
+
+            if (Physics.Linecast(gun.fireTransform.position, hit.point, out hit) == true)
             {
                 aimTarget = hit.point;
             }
+        }
+        else if (Physics.Linecast(gun.fireTransform.position, ray.GetPoint(gun.fireDistance), out hit) == true)
+        {
+            aimTarget = hit.point;
         }
         else
         {
@@ -86,11 +97,16 @@ public class PlayerShooter : MonoBehaviour
         }
     }
 
+    void UpdateUI()
+    {
+        UIManager.Instance.UpdateCrossHairPosition(aimTarget);
+    }
+
     void UpdateAnimaion()
     {
         float angle = camera.transform.eulerAngles.x;
 
-        if (angle >= 270f)
+        if (angle > 270f)
         {
             angle -= 360f;
         }
