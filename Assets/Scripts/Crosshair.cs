@@ -27,8 +27,5 @@ public class Crosshair : MonoBehaviour
     private void Update()
     {
         crossHairRectTransform.position = targetPoint;
-
-        //Debug.Log(aimPoint.transform.position);
-        //Debug.Log(targetPoint);
     }
 }

@@ -114,6 +114,10 @@ public class Gun : MonoBehaviour
         StartCoroutine(ShotEffect(hitPosition));
 
         --currentMagSize;
+        if (currentMagSize <= 0)
+        {
+            state = State.Empty;
+        }
     }
 
    
@@ -135,8 +139,9 @@ public class Gun : MonoBehaviour
 
     public bool Reload()
     {
-        if (currentMagSize < magSize || totalMagSize <= 0)
+        if (currentMagSize < magSize && totalMagSize >= 0)
         {
+            Debug.Log("1");
             state = State.Reload;
             StartCoroutine(ReloadCoroutine());
             return true;
