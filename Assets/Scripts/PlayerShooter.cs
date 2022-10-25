@@ -26,7 +26,7 @@ public class PlayerShooter : MonoBehaviour
         {
             Shot();
         }
-        if (input.isReload == true)
+        if (Input.GetButtonDown("Reload") == true)
         {
             Reload();
         }
@@ -38,9 +38,7 @@ public class PlayerShooter : MonoBehaviour
 
         UpdateAnimaion();
         
-        UpdateUI();
-
-        
+        UpdateUI();        
     }
 
     void Shot()

@@ -141,7 +141,6 @@ public class Gun : MonoBehaviour
     {
         if (currentMagSize < magSize && totalMagSize >= 0)
         {
-            Debug.Log("1");
             state = State.Reload;
             StartCoroutine(ReloadCoroutine());
             return true;
